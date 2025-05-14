@@ -32,4 +32,3 @@ Route::get('/products/{id}', function ($id) {
 });
 
 
-Route::get('/contact', fn() => ['12' => 2323]);
