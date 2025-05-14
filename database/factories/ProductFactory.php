@@ -27,4 +27,5 @@ class ProductFactory extends Factory
             'cost' => $this->getArbitraryCost(),
         ];
     }
+
 }

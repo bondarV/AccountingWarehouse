@@ -2,13 +2,11 @@
 
 namespace App\Models;
 
-use Database\Factories\ProductFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Product extends Model
+class StockMovement extends Model
 {
-    /** @use HasFactory<ProductFactory> */
+    /** @use HasFactory<\Database\Factories\StockMovementFactory> */
     use HasFactory;
-
 }
