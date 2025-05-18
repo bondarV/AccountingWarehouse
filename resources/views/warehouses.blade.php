@@ -7,7 +7,7 @@
             <x-items-exhibition.title href="/warehouse/{{$warehouse['id']}}">
                 {{$warehouse->title}}
             </x-items-exhibition.title>
-            <x-items-exhibition.interactive :sections="[['name'=> 'inventory','color'=> 'blue','href'=> '/inventories/'.$warehouse['id']],'Transactions' => ['name'=>'transactions','color'=>'green','href'=>'/transactions/'.$warehouse['id']]]"/>
+            <x-items-exhibition.interactive-area :sections="[['name'=> 'inventory','color'=> 'blue','href'=> '/inventories/'.$warehouse['id']],'Transactions' => ['name'=>'transactions','color'=>'green','href'=>'/transactions/'.$warehouse['id']]]"/>
         </x-items-exhibition>
     @endforeach
 
