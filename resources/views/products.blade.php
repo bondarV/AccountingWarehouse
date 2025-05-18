@@ -1,13 +1,21 @@
 <x-layout>
     <x-slot:title>Products</x-slot:title>
+    <x-slot:page>
+        Products
+    </x-slot:page>
+    @foreach($products as $product)
 
-    <p>products</p>
-    <ul>
-        @foreach($products as $product)
-            <li class="mx-10">
-                <a href="/products/{{$product['id']}}"> {{$product['name']}}:
-                    <strong>{{$product['price']}}</strong></a>
-            </li>
-        @endforeach
-    </ul>
+        <x-items-exhibition>
+            @php
+                $sections =[['name'=> 'Destroy','color'=> 'red','href'=> '/erase/'.$product['id']]];
+            @endphp
+            <x-items-exhibition.title href="/product/{{$product['id']}}">
+                {{$product->name}}
+            </x-items-exhibition.title>
+                <x-items-exhibition.interactive-area :sections="$sections"/>
+        </x-items-exhibition>
+    @endforeach
+    <x-pagination>
+        {{$products->links()}}
+    </x-pagination>
 </x-layout>
