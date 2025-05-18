@@ -5,8 +5,8 @@
     <ul>
         @foreach($products as $product)
             <li class="mx-10">
-                <a href="/products/{{$product['id']}}"> {{$product['title']}}:
-                    <strong>{{$product['amount']}}</strong></a>
+                <a href="/products/{{$product['id']}}"> {{$product['name']}}:
+                    <strong>{{$product['price']}}</strong></a>
             </li>
         @endforeach
     </ul>
