@@ -16,16 +16,17 @@ Route::get('/warehouses', function () {
 });
 
 Route::get('/products', function () {
-    $products = Product::cursorPaginate(20);
+    $products = Product::cursorPaginate(5);
     return view('products', ['products' => $products]);
 });
 
 Route::get('/products/{id}', function ($id) {
+    $general_quantity = Inventory::where('product_id', $id)->all()->sum('quantity');
     $product = Product::where('id', $id)->firstOrFail();
     if (!$product) {
         abort(404);
     }
-    return view('product', ['product' => $product]);
+    return view('product', ['product' => $product], ['general_quantity' => $general_quantity]);
 });
 Route::get('/inventory/{id}', function ($id) {
     $warehouse_items = Inventory::where('warehouse_id', $id)->cursorPaginate(20);
