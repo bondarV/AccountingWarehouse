@@ -1,6 +1,8 @@
 <x-layout>
     <x-slot:title>Products</x-slot:title>
-
+    <x-slot:page>
+        Products
+    </x-slot:page>
     <p>products</p>
     <ul>
         @foreach($products as $product)
@@ -10,4 +12,7 @@
             </li>
         @endforeach
     </ul>
+    <div>
+        {{$products->links()}}
+    </div>
 </x-layout>
