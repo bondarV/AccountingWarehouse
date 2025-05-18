@@ -15,3 +15,4 @@
         {{$warehouses->links()}}
     </x-pagination>
 </x-layout>
+
