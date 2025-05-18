@@ -12,12 +12,12 @@ Route::get('/', function () {
 
 Route::get('/warehouses', function () {
     $warehouses = Warehouse::cursorPaginate(5);
-    return view('warehouses', ['warehouses' => $warehouses]);
+    return view('warehouses.index', ['warehouses' => $warehouses]);
 });
 
 Route::get('/products', function () {
     $products = Product::cursorPaginate(5);
-    return view('products', ['products' => $products]);
+    return view('products.index', ['products' => $products]);
 });
 
 Route::get('/products/{id}', function ($id) {
@@ -26,10 +26,18 @@ Route::get('/products/{id}', function ($id) {
     if (!$product) {
         abort(404);
     }
-    return view('product', ['product' => $product], ['general_quantity' => $general_quantity]);
+    return view('product.show', ['product' => $product], ['general_quantity' => $general_quantity]);
 });
-Route::get('/inventory/{id}', function ($id) {
-    $warehouse_items = Inventory::where('warehouse_id', $id)->cursorPaginate(20);
-    return view('inventory', ['inventory' => $warehouse_items]);
+Route::get('/warehouses/{id}', function ($id) {
+    $warehouse = Warehouse::find($id);
+    return view('warehouses.show', ['warehouse' => $warehouse]);
 });
 
+
+
+//
+//Route::get('/inventory/{id}', function ($id) {
+//    $warehouse_items = Inventory::where('warehouse_id', $id)->cursorPaginate(20);
+//    return view('inventory', ['inventory' => $warehouse_items]);
+//});
+//

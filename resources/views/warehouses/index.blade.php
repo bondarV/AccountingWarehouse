@@ -4,7 +4,7 @@
 
     @foreach($warehouses as $warehouse)
         <x-items-exhibition>
-            <x-items-exhibition.title href="/warehouse/{{$warehouse['id']}}">
+            <x-items-exhibition.title href="/warehouses/{{$warehouse['id']}}">
                 {{$warehouse->title}}
             </x-items-exhibition.title>
             <x-items-exhibition.interactive-area :sections="[['name'=> 'inventory','color'=> 'blue','href'=> '/inventories/'.$warehouse['id']],'Transactions' => ['name'=>'transactions','color'=>'green','href'=>'/transactions/'.$warehouse['id']]]"/>
@@ -15,3 +15,4 @@
         {{$warehouses->links()}}
     </x-pagination>
 </x-layout>
+
