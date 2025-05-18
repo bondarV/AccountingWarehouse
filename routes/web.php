@@ -28,6 +28,13 @@ Route::get('/products/{id}', function ($id) {
     }
     return view('product.show', ['product' => $product], ['general_quantity' => $general_quantity]);
 });
+Route::get('/warehouses/{id}', function ($id) {
+    $warehouse = Warehouse::find($id);
+    return view('warehouses.show', ['warehouse' => $warehouse]);
+});
+
+
+
 //
 //Route::get('/inventory/{id}', function ($id) {
 //    $warehouse_items = Inventory::where('warehouse_id', $id)->cursorPaginate(20);
