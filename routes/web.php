@@ -20,9 +20,20 @@ Route::get('/products', function () {
     return view('products.index', ['products' => $products]);
 });
 
+Route::get('/warehouses/{id}/inventory', function ($id) {
+    $inventory = Inventory::with('warehouse', 'product')
+        ->where('warehouse_id', $id)
+        ->cursorPaginate(5);
+    $warehouse = Warehouse::find($id);
+    return view('warehouses.inventories.index', ['inventory' => $inventory, 'warehouse' => $warehouse]);
+});
+
 Route::get('/products/{id}', function ($id) {
     $general_quantity = Inventory::where('product_id', $id)->get()->sum('quantity');
-    $product = Product::where('id', $id)->firstOrFail();
+    $product = Product::with(['warehouses' => function ($query) {
+        $query->withPivot('quantity');
+    }])->find($id);
+
     if (!$product) {
         abort(404);
     }
@@ -31,11 +42,11 @@ Route::get('/products/{id}', function ($id) {
 
 Route::get('/warehouses/{id}', function ($id) {
     $warehouse = Warehouse::find($id);
-    $items = Inventory::where('warehouse_id', $id)->cursorPaginate(5);
+    $items = Inventory::with('warehouse', 'product')
+        ->where('warehouse_id', $id)
+        ->cursorPaginate(5);
     return view('warehouses.show', ['items' => $items], ['warehouse' => $warehouse]);
 });;
-
-
 
 
 //
