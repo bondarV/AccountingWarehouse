@@ -1,12 +1,6 @@
-@props(['destination' =>null])
-@if(!$destination)
-    <a href="{{ url()->previous() }}"
-       class="ml-auto text-blue-600 hover:text-blue-800 hover:underline font-semibold">
-        &larr; Back
-    </a>
-@else
-    <a href="{{$destination}}"
-       class="ml-auto text-blue-600 hover:text-blue-800 hover:underline font-semibold">
-        &larr; Back
-    </a>
-@endif
+@props(['href'])
+
+<a href="{{ $href ?? url()->previous() }}"
+    {{ $attributes->merge(['class' => 'ml-auto text-blue-600 hover:text-blue-800 hover:underline font-semibold']) }}>
+    {!! trim($slot) !== '' ? $slot : '&larr; Back' !!}
+</a>

@@ -6,8 +6,7 @@
         {{'In-depth info about: '.$warehouse->title}}
     </x-slot:page>
     <x-slot:backButton>
-        <x-return-back destination="/warehouses/">
-        </x-return-back>
+        <x-return-back href="/warehouses/" />
     </x-slot:backButton>
     <x-warehouse-item-exhibition>
         <x-slot:code>
