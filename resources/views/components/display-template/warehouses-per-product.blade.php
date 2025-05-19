@@ -1,0 +1,10 @@
+@props(['warehouses'])
+<x-display-template
+    :items="$warehouses"
+    href="warehouses"
+    labelField="title"
+    labelSource="self"
+    quantityField="pivot.quantity"
+    :isProduct="true">
+    <x-slot:header>Warehouses</x-slot:header>
+</x-display-template>

@@ -20,19 +20,37 @@ Route::get('/products', function () {
     return view('products.index', ['products' => $products]);
 });
 
+Route::get('/warehouses/{id}/inventory', function ($id) {
+    $inventory = Inventory::with('warehouse', 'product')
+        ->where('warehouse_id', $id)
+        ->cursorPaginate(5);
+    $warehouse = Warehouse::find($id);
+    return view('warehouses.inventories.index', ['inventory' => $inventory, 'warehouse' => $warehouse]);
+});
+
 Route::get('/products/{id}', function ($id) {
-    $general_quantity = Inventory::where('product_id', $id)->all()->sum('quantity');
-    $product = Product::where('id', $id)->firstOrFail();
+    $general_quantity = Inventory::where('product_id', $id)->get()->sum('quantity');
+    $product = Product::with(['warehouses' => function ($query) {
+        $query->withPivot('quantity');
+    }])->find($id);
+
     if (!$product) {
         abort(404);
     }
-    return view('product.show', ['product' => $product], ['general_quantity' => $general_quantity]);
-});
-Route::get('/warehouses/{id}', function ($id) {
-    $warehouse = Warehouse::find($id);
-    return view('warehouses.show', ['warehouse' => $warehouse]);
+    return view('products.show', ['product' => $product,'general_quantity' => $general_quantity]);
 });
 
+Route::get('/warehouses/{id}', function ($id) {
+    $warehouse = Warehouse::with(['products' => function ($query) {
+        $query->withPivot('quantity');
+    }])->find($id);
+    $items = Inventory::with('warehouse', 'product')
+        ->where('warehouse_id', $id)
+        ->cursorPaginate(5);
+    return view('warehouses.show', [
+        'items' => $items,
+        'warehouse' => $warehouse,
+    ]);});;
 
 
 //

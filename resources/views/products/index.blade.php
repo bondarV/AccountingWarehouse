@@ -9,7 +9,7 @@
             @php
                 $sections =[['name'=> 'Destroy','color'=> 'red','href'=> '/erase/'.$product['id']]];
             @endphp
-            <x-items-exhibition.title href="/product/{{$product['id']}}">
+            <x-items-exhibition.title href="/products/{{$product['id']}}">
                 {{$product->name}}
             </x-items-exhibition.title>
                 <x-items-exhibition.interactive-area :sections="$sections"/>
