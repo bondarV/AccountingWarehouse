@@ -12,7 +12,7 @@
             <x-items-exhibition.title href="/products/{{$product['id']}}">
                 {{$product->name}}
             </x-items-exhibition.title>
-                <x-items-exhibition.interactive-area :sections="$sections"/>
+                <x-items-exhibition.interactive-area. :sections="$sections"/>
         </x-items-exhibition>
     @endforeach
     <x-pagination>
