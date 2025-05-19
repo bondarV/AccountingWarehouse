@@ -6,7 +6,7 @@
         {{'In-depth info about: '.$warehouse->title}}
     </x-slot:page>
     <x-slot:backButton>
-        <x-return-back>
+        <x-return-back destination="/warehouses/">
         </x-return-back>
     </x-slot:backButton>
     <x-warehouse-item-exhibition>
@@ -20,5 +20,5 @@
             {{$warehouse->location}}
         </x-slot:location>
     </x-warehouse-item-exhibition>
-    <x-product-per-warehouse :items="$items"/>
+    <x-display-template.product-per-warehouse :items="$items"/>
 </x-layout>

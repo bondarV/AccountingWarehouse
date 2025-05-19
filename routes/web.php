@@ -37,16 +37,20 @@ Route::get('/products/{id}', function ($id) {
     if (!$product) {
         abort(404);
     }
-    return view('products.show', ['product' => $product], ['general_quantity' => $general_quantity]);
+    return view('products.show', ['product' => $product,'general_quantity' => $general_quantity]);
 });
 
 Route::get('/warehouses/{id}', function ($id) {
-    $warehouse = Warehouse::find($id);
+    $warehouse = Warehouse::with(['products' => function ($query) {
+        $query->withPivot('quantity');
+    }])->find($id);
     $items = Inventory::with('warehouse', 'product')
         ->where('warehouse_id', $id)
         ->cursorPaginate(5);
-    return view('warehouses.show', ['items' => $items], ['warehouse' => $warehouse]);
-});;
+    return view('warehouses.show', [
+        'items' => $items,
+        'warehouse' => $warehouse,
+    ]);});;
 
 
 //
