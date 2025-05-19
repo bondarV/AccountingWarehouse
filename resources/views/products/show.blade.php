@@ -3,6 +3,6 @@
         {{trim(ucfirst($product['name']))}}
     </x-slot:title>
     <h1>{{$product['name']}}</h1>
-    <p>На складі лишилося рівно: {{$product['amount']}}</p>
+    <p>: {{$general_quantity}}</p>
     <button><a href="/products">Back</a></button>
 </x-layout>

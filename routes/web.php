@@ -21,17 +21,20 @@ Route::get('/products', function () {
 });
 
 Route::get('/products/{id}', function ($id) {
-    $general_quantity = Inventory::where('product_id', $id)->all()->sum('quantity');
+    $general_quantity = Inventory::where('product_id', $id)->get()->sum('quantity');
     $product = Product::where('id', $id)->firstOrFail();
     if (!$product) {
         abort(404);
     }
-    return view('product.show', ['product' => $product], ['general_quantity' => $general_quantity]);
+    return view('products.show', ['product' => $product], ['general_quantity' => $general_quantity]);
 });
+
 Route::get('/warehouses/{id}', function ($id) {
     $warehouse = Warehouse::find($id);
-    return view('warehouses.show', ['warehouse' => $warehouse]);
-});
+    $items = Inventory::where('warehouse_id', $id)->cursorPaginate(5);
+    return view('warehouses.show', ['items' => $items], ['warehouse' => $warehouse]);
+});;
+
 
 
 
