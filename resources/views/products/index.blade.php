@@ -5,15 +5,15 @@
     </x-slot:page>
     @foreach($products as $product)
 
-        <x-items-exhibition>
+        <x-partials>
             @php
                 $sections =[['name'=> 'Destroy','color'=> 'red','href'=> '/erase/'.$product['id']]];
             @endphp
-            <x-items-exhibition.title href="/products/{{$product['id']}}">
+            <x-partials.title href="/products/{{$product['id']}}">
                 {{$product->name}}
-            </x-items-exhibition.title>
-                <x-items-exhibition.interactive-area. :sections="$sections"/>
-        </x-items-exhibition>
+            </x-partials.title>
+                <x-partials.interactive-area. :sections="$sections"/>
+        </x-partials>
     @endforeach
     <x-pagination>
         {{$products->links()}}

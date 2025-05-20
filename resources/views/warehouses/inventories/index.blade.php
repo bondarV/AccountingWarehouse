@@ -4,9 +4,6 @@
     <x-slot:backButton>
         <x-return-back href="/warehouses/" />
     </x-slot:backButton>
-    <x-display-template.product-per-warehouse :items="$inventory"/>
-        <x-pagination>
-            {{$inventory->links()}}
-        </x-pagination>
+    <x-entity-display-template.products :items="$products"/>
 </x-layout>
 

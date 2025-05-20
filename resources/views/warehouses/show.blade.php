@@ -6,9 +6,9 @@
         {{'In-depth info about: '.$warehouse->title}}
     </x-slot:page>
     <x-slot:backButton>
-        <x-return-back href="/warehouses/" />
+        <x-return-back href="/warehouses/"/>
     </x-slot:backButton>
-    <x-warehouse-item-exhibition>
+    <x-entity-display-template.warehouses.data>
         <x-slot:code>
             {{$warehouse->code}}
         </x-slot:code>
@@ -18,6 +18,6 @@
         <x-slot:location>
             {{$warehouse->location}}
         </x-slot:location>
-    </x-warehouse-item-exhibition>
-    <x-display-template.product-per-warehouse :items="$items"/>
+    </x-entity-display-template.warehouses.data>
+    <x-entity-display-template.products :items="$items"/>
 </x-layout>

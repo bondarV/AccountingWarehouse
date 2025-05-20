@@ -29,6 +29,5 @@
             <strong>Total Quantity in Stock:</strong> {{ $general_quantity }}
         </p>
     </div>
-    <x-display-template.warehouses-per-product :warehouses="$product->warehouses" />
-
+    <x-entity-display-template.warehouses :product="$product" :warehouses="$warehouses"/>
 </x-layout>

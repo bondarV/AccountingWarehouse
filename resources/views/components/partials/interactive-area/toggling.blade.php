@@ -1,6 +1,6 @@
 @props(['sections'])
 
-<x-items-exhibition.interactive-area>
+<x-partials.interactive-area>
 
         @foreach($sections as $section)
             <a href="{{$section['href']}}"
@@ -9,4 +9,4 @@
             </a>
         @endforeach
 
-</x-items-exhibition.interactive-area>
+</x-partials.interactive-area>
