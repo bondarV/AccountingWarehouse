@@ -3,12 +3,12 @@
     <x-slot:page>Warehouses</x-slot:page>
 
     @foreach($warehouses as $warehouse)
-        <x-items-exhibition>
-            <x-items-exhibition.title href="/warehouses/{{$warehouse['id']}}">
+        <x-partials>
+            <x-partials.title href="/warehouses/{{$warehouse['id']}}">
                 {{$warehouse->title}}
-            </x-items-exhibition.title>
-            <x-items-exhibition.interactive-area.toggling :sections="[['name'=> 'inventory','color'=> 'blue','href'=> '/warehouses/'.$warehouse['id'].'/inventory'],'Transactions' => ['name'=>'transactions','color'=>'green','href'=>'/transactions/'.$warehouse['id']]]"/>
-        </x-items-exhibition>
+            </x-partials.title>
+            <x-partials.interactive-area.toggling :sections="[['name'=> 'inventory','color'=> 'blue','href'=> '/warehouses/'.$warehouse['id'].'/inventory'],'Transactions' => ['name'=>'transactions','color'=>'green','href'=>'/transactions/'.$warehouse['id']]]"/>
+        </x-partials>
     @endforeach
 
     <x-pagination>

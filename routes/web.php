@@ -40,7 +40,7 @@ Route::get('/warehouses/{id}/inventory', function ($id) {
         ->cursorPaginate(5);
     $warehouse = Warehouse::find($id);
 
-    return view('warehouses.inventories.index', ['inventory' => $inventory, 'warehouse' => $warehouse]);
+    return view('warehouses.inventories.index', ['products' => $inventory, 'warehouse' => $warehouse]);
 });
 
 Route::get('/products/{id}', function ($id) {
