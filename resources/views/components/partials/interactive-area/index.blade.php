@@ -1,5 +1,3 @@
-
-
-<div class="flex gap-2 justify-end-safe">
-  {{$slot}}
+<div class="flex-1 flex justify-center items-center gap-2">
+    {{$slot}}
 </div>
