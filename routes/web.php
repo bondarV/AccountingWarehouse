@@ -9,11 +9,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'about');
 
-Route::get('/warehouses', function () {
-    $warehouses = Warehouse::cursorPaginate(5);
-
-    return view('warehouses.index', ['warehouses' => $warehouses]);
-});
 
 Route::get('/products', function () {
     $products = Product::cursorPaginate(5);
@@ -55,11 +50,17 @@ Route::get('/products/{id}', function ($id) {
         ->withPivot('quantity')
         ->paginate(5);
 
-
-
     return view('products.show', ['product' => $product, 'general_quantity' => $general_quantity, 'warehouses' => $warehouses]);
 });
 
+// Index
+Route::get('/warehouses', function () {
+    $warehouses = Warehouse::cursorPaginate(5);
+
+    return view('warehouses.index', ['warehouses' => $warehouses]);
+});
+
+// Show
 Route::get('/warehouses/{id}', function ($id) {
     $warehouse = Warehouse::with(['products' => function ($query) {
         $query->withPivot('quantity');
@@ -73,4 +74,10 @@ Route::get('/warehouses/{id}', function ($id) {
         'warehouse' => $warehouse,
     ]);
 });
-// Route::resource('warehouses', WarehouseController::class);
+// index
+Route::get('/warehouses', function () {
+    $warehouses = Warehouse::cursorPaginate(5);
+
+    return view('warehouses.index', ['warehouses' => $warehouses]);
+});
+Route::resource('warehouses', WarehouseController::class)->only(['index', 'show']);
