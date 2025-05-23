@@ -4,7 +4,7 @@ namespace App\Enums;
 
 enum MovementType: string
 {
-    case IN = 'in';
     case OUT = 'out';
+    case RELOCATE = 'relocate';
     case ADJUST = 'adjust';
 }

@@ -20,11 +20,18 @@ Route::resource('warehouses.products', InventoryController::class)->shallow()->o
 
 
 
+Route::get('/warehouses/{warehouse}/products/{product}/transactions', function ($warehouseId, $productId) {
+    $inventory = Inventory::where('warehouse_id', $warehouseId)->where('product_id', $productId)->first();
+
+    return view('warehouses.transactions.create', ['inventory' => $inventory, 'operations' => MovementType::cases()]);
+});
+
 Route::get('/warehouses/{warehouse}/products/{product}/transactions/create', function ($warehouseId, $productId) {
     $inventory = Inventory::where('warehouse_id', $warehouseId)->where('product_id', $productId)->first();
 
     return view('warehouses.transactions.create', ['inventory' => $inventory, 'operations' => MovementType::cases()]);
 });
+
 
 Route::post('/warehouses/{warehouse}/products/{product}/transactions/create', function ($warehouseId, $productId) {
     $inventory = Inventory::where('product_id', $productId)->where('warehouse_id', $warehouseId)->first();
