@@ -18,11 +18,13 @@ class Product extends Model
         return $this->hasMany(Inventory::class);
     }
 
-    public function total_quantity(): int|float{
+    public function total_quantity(): int|float
+    {
         return $this->occurrences()->sum('quantity');
     }
+
     public function warehouses(): BelongsToMany
     {
-        return $this->belongsToMany(Warehouse::class, 'inventory')->withPivot('quantity');
+        return $this->belongsToMany(Warehouse::class, 'inventories')->withPivot('quantity');
     }
 }

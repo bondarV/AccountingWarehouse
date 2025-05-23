@@ -36,33 +36,31 @@
             </div>
 
             <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1">Quantity</label>
-                <input type="number" name="quantity" min="1" required
+                <label for="quantity" class="block text-sm font-semibold text-gray-700 mb-1">Quantity</label>
+                <input id="quantity" type="number" name="quantity" min="1" required
                        class="w-full rounded-lg border border-gray-300 px-4 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-300 focus:ring-1"/>
             </div>
 
             <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1">Reason</label>
-                <input type="text" name="reason" placeholder="e.g. Restocking, Sale, Damage" required
+                <label for="reason" class="block text-sm font-semibold text-gray-700 mb-1">Reason</label>
+                <input id="reason" type="text" name="reason" placeholder="e.g. Restocking, Sale, Damage" required
                        class="w-full rounded-lg border border-gray-300 px-4 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-300 focus:ring-1"/>
             </div>
 
             <div id="relocate-fields" class="hidden">
                 <label class="block text-sm font-semibold text-gray-700 mb-1">Warehouse Placement</label>
-                <input type="text" name="supplier"
-                       class="w-full rounded-lg border border-gray-300 px-4 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-300 focus:ring-1"/>
+                <select name="warehouses"
+                       class="w-full rounded-lg border border-gray-300 px-4 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-300 focus:ring-1">
+                    @foreach($warehouses as $warehouse)
+                        <option  value="{{$warehouse->id}}">    {{$warehouse->title}} </option>
+                    @endforeach>
+                </select>
             </div>
 
             <div id="out-fields" class="hidden">
-                <label class="block text-sm font-semibold text-gray-700 mb-1">Customer Name</label>
-                <input type="text" name="customer"
+                <label for="customer" class="block text-sm font-semibold text-gray-700 mb-1">Customer Name</label>
+                <input id="customer" type="text" name="customer"
                        class="w-full rounded-lg border border-gray-300 px-4 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-300 focus:ring-1"/>
-            </div>
-
-            <div id="adjust-fields" class="hidden">
-                <label class="block text-sm font-semibold text-gray-700 mb-1">Adjustment Note</label>
-                <textarea name="adjustment_note" rows="3"
-                          class="w-full rounded-lg border border-gray-300 px-4 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-300 focus:ring-1"></textarea>
             </div>
 
             <div>
