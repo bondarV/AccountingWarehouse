@@ -1,6 +1,8 @@
 <?php
 
 use App\Enums\MovementType;
+use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\WarehouseController;
 use App\Models\Inventory;
 use App\Models\Product;
@@ -9,18 +11,21 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'about');
 
+Route::resource('products', ProductController::class)->only(['index', 'show'])->only(['index', 'show']);
 
-Route::get('/products', function () {
-    $products = Product::cursorPaginate(5);
+Route::resource('warehouses', WarehouseController::class)->only(['index', 'show'])->only(['index', 'show']);
 
-    return view('products.index', ['products' => $products]);
-});
+Route::resource('warehouses.products', InventoryController::class)->shallow()->only(['index']);
+
+
+
 
 Route::get('/warehouses/{warehouse}/products/{product}/transactions/create', function ($warehouseId, $productId) {
     $inventory = Inventory::where('warehouse_id', $warehouseId)->where('product_id', $productId)->first();
 
     return view('warehouses.transactions.create', ['inventory' => $inventory, 'operations' => MovementType::cases()]);
 });
+
 Route::post('/warehouses/{warehouse}/products/{product}/transactions/create', function ($warehouseId, $productId) {
     $inventory = Inventory::where('product_id', $productId)->where('warehouse_id', $warehouseId)->first();
     request()->validate([
@@ -29,55 +34,3 @@ Route::post('/warehouses/{warehouse}/products/{product}/transactions/create', fu
 
     return redirect('/warehouses/'.$warehouseId);
 });
-Route::get('/warehouses/{id}/inventory', function ($id) {
-    $inventory = Inventory::with('warehouse', 'product')
-        ->where('warehouse_id', $id)
-        ->cursorPaginate(5);
-    $warehouse = Warehouse::find($id);
-
-    return view('warehouses.inventories.index', ['products' => $inventory, 'warehouse' => $warehouse]);
-});
-
-Route::get('/products/{id}', function ($id) {
-    $general_quantity = Inventory::where('product_id', $id)->get()->sum('quantity');
-    $product = Product::find($id);
-
-    if (! $product) {
-        abort(404);
-    }
-
-    $warehouses = $product->warehouses()
-        ->withPivot('quantity')
-        ->paginate(5);
-
-    return view('products.show', ['product' => $product, 'general_quantity' => $general_quantity, 'warehouses' => $warehouses]);
-});
-
-// Index
-Route::get('/warehouses', function () {
-    $warehouses = Warehouse::cursorPaginate(5);
-
-    return view('warehouses.index', ['warehouses' => $warehouses]);
-});
-
-// Show
-Route::get('/warehouses/{id}', function ($id) {
-    $warehouse = Warehouse::with(['products' => function ($query) {
-        $query->withPivot('quantity');
-    }])->find($id);
-    $items = Inventory::with('warehouse', 'product')
-        ->where('warehouse_id', $id)
-        ->cursorPaginate(5);
-
-    return view('warehouses.show', [
-        'items' => $items,
-        'warehouse' => $warehouse,
-    ]);
-});
-// index
-Route::get('/warehouses', function () {
-    $warehouses = Warehouse::cursorPaginate(5);
-
-    return view('warehouses.index', ['warehouses' => $warehouses]);
-});
-Route::resource('warehouses', WarehouseController::class)->only(['index', 'show']);

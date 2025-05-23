@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Inventory;
+use App\Models\Warehouse;
 
 class WarehouseController extends Controller
 {
@@ -11,54 +12,24 @@ class WarehouseController extends Controller
      */
     public function index()
     {
-        //
-    }
+        $warehouses = Warehouse::cursorPaginate(5);
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+        return view('warehouses.index', ['warehouses' => $warehouses]);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Warehouse $warehouse)
     {
-        //
-    }
+        $items = Inventory::with('warehouse', 'product')
+            ->where('warehouse_id', $warehouse->id)
+            ->cursorPaginate(5);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return view('warehouses.show', [
+            'items' => $items,
+            'warehouse' => $warehouse,
+        ]);
     }
 }
