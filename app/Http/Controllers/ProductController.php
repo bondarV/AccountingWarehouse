@@ -18,6 +18,7 @@ class ProductController extends Controller
     {
         $general_quantity = Inventory::where('product_id', $product->id)->get()->sum('quantity');
 
+
         $warehouses = $product->warehouses()
             ->withPivot('quantity')
             ->paginate(5);

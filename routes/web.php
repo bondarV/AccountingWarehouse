@@ -5,7 +5,6 @@ use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\WarehouseController;
 use App\Models\Inventory;
-use App\Models\Product;
 use App\Models\Warehouse;
 use Illuminate\Support\Facades\Route;
 
@@ -17,9 +16,6 @@ Route::resource('warehouses', WarehouseController::class)->only(['index', 'show'
 
 Route::resource('warehouses.products', InventoryController::class)->shallow()->only(['index']);
 
-
-
-
 Route::get('/warehouses/{warehouse}/products/{product}/transactions', function ($warehouseId, $productId) {
     $inventory = Inventory::where('warehouse_id', $warehouseId)->where('product_id', $productId)->first();
 
@@ -29,9 +25,10 @@ Route::get('/warehouses/{warehouse}/products/{product}/transactions', function (
 Route::get('/warehouses/{warehouse}/products/{product}/transactions/create', function ($warehouseId, $productId) {
     $inventory = Inventory::where('warehouse_id', $warehouseId)->where('product_id', $productId)->first();
 
-    return view('warehouses.transactions.create', ['inventory' => $inventory, 'operations' => MovementType::cases()]);
-});
+    $warehouses = Warehouse::all();
 
+    return view('warehouses.transactions.create', ['inventory' => $inventory, 'operations' => MovementType::cases(), 'warehouses' => $warehouses]);
+});
 
 Route::post('/warehouses/{warehouse}/products/{product}/transactions/create', function ($warehouseId, $productId) {
     $inventory = Inventory::where('product_id', $productId)->where('warehouse_id', $warehouseId)->first();

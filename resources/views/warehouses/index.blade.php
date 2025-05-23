@@ -7,7 +7,7 @@
             <x-partials.title href="/warehouses/{{$warehouse['id']}}">
                 {{$warehouse->title}}
             </x-partials.title>
-            <x-partials.interactive-area.toggling :sections="[['name'=> 'inventory','color'=> 'blue','href'=> '/warehouses/'.$warehouse['id'].'/products'],'Transactions' => ['name'=>'transactions','color'=>'green','href'=>'/warehouses/'.$warehouse->id.'/transactions/'.$warehouse['id']]]"/>
+            <x-partials.interactive-area.toggling :sections="[['name'=> 'inventory','color'=> 'blue','href'=> '/warehouses/'.$warehouse['id'].'/products'],'Transactions' => ['name'=>'transactions','color'=>'green','href'=>'/warehouses/'.$warehouse->id. '/transactions/'.$warehouse['id']]]"/>
     </x-partials>
     @endforeach
 
