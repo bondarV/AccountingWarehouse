@@ -8,7 +8,7 @@
             :itemHref="'/products/'.$item->product->id"
             :label="$item->product->name"
             :quantity="$item->quantity"
-            :operateHref="'/warehouses/'.$item->warehouse->id.'/products/'.$item->product->id.'/transactions/create'"
+            :operateHref="'/warehouses/'.$item->warehouse->id.'/products/'.$item->product->id.'/operations/create'"
         >
         </x-entity-display-template>
     @endforeach

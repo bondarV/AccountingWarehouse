@@ -17,10 +17,9 @@
         </h2>
 
         <form
-            action="{{ url('/warehouses/' . $inventory->warehouse->id . '/products/' . $inventory->product->id . '/transactions/create') }}"
+            action="{{ route('warehouses.products.operations.store',[$key_warehouse->id,$inventory->product->id])}}"
             method="POST" class="space-y-6">
             @csrf
-
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1">
                     {{ $variationLabel ?? 'Movement Type' }}
@@ -49,10 +48,10 @@
 
             <div id="relocate-fields" class="hidden">
                 <label class="block text-sm font-semibold text-gray-700 mb-1">Warehouse Placement</label>
-                <select name="warehouses"
-                       class="w-full rounded-lg border border-gray-300 px-4 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-300 focus:ring-1">
+                <select name="warehouse"
+                        class="w-full rounded-lg border border-gray-300 px-4 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-300 focus:ring-1">
                     @foreach($warehouses as $warehouse)
-                        <option  value="{{$warehouse->id}}">    {{$warehouse->title}} </option>
+                        <option value="{{$warehouse->id}}">    {{$warehouse->title}} </option>
                     @endforeach>
                 </select>
             </div>

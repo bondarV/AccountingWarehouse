@@ -8,7 +8,7 @@
             :itemHref="'/warehouses/'.$warehouse->id"
             :label="$warehouse->title"
             :quantity="$warehouse->pivot->quantity"
-            :operateHref="'/warehouses/'.$warehouse->id.'/products/'.$product->id.'/transactions/create'"
+            :operateHref="'/warehouses/'.$warehouse->id.'/products/'.$product->id.'/operations/create'"
         />
     @endforeach
     <x-pagination>
