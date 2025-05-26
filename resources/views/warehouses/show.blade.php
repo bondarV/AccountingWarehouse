@@ -1,4 +1,9 @@
 <x-layout>
+    @if (session('success'))
+        <div class="p-4 font-bold underline bg-blue-300 size-fit">
+            {{ session('success') }}
+        </div>
+    @endif
     <x-slot:title>
         {{$warehouse->title}}
     </x-slot:title>

@@ -32,15 +32,12 @@ class OperationController extends Controller
 
         $operations = StockMovement::where('warehouse_id', $warehouse->id)->where('product_id', $product->id)->first();
 
-        $warehouses = Warehouse::all();
+        $warehouses = Warehouse::where('id','!=',$warehouse->id)->get();
 
         $key_warehouse = $warehouse;
         return view('warehouses.operations.create', ['inventory' => $inventory, 'operations' => MovementType::cases(), 'warehouses' => $warehouses, 'key_warehouse' => $key_warehouse]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Warehouse $warehouse, Product $product, Request $request)
     {
         $inventory = Inventory::where('warehouse_id', $warehouse->id)->where('product_id', $product->id)->first();
@@ -54,12 +51,14 @@ class OperationController extends Controller
 
         $request->validate([
             'movement_type' => [Rule::enum(MovementType::class)],
-            'quantity' => ['gte:0','required'],
+            'quantity' => ['gte:0','required',],
+            'reason' => ['nullable', 'max:255'],
         ]);
 
         $this->operationService->performOperation($request);
 
-        return redirect('/warehouses/' . $request->get('warehouse_id'));
+        session()->forget('current_movement_type');
+        return redirect('/warehouses/' . $request->get('warehouse_id'))->with('success', 'The operation was created.');
     }
 
     /**

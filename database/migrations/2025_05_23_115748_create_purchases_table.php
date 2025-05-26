@@ -15,9 +15,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('purchases', function (Blueprint $table) {
-            $table->ulid();
+            $table->ulid('id')->primary();
             $table->foreignIdFor(Warehouse::class)->constrained()->cascadeOnDelete();
-            $table->foreignUlid('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignUUid('user_id')->constrained()->cascadeOnDelete();
             $table->mediumInteger('quantity');
             $table->timestamps();
         });

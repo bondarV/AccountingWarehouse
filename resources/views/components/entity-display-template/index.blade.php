@@ -1,5 +1,6 @@
 @props(['itemHref','label','quantity','operateHref'])
 
+
 <x-partials>
     <x-partials.title :href="$itemHref">
         {{ $label }}
