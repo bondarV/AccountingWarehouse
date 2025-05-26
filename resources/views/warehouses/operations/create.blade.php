@@ -21,8 +21,9 @@
             method="POST" class="space-y-6">
             @csrf
             <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1">
+                <label class="flex items-center gap-1 text-sm font-semibold text-gray-700 mb-1">
                     {{ $variationLabel ?? 'Movement Type' }}
+                    <x-forms.required-indicator/>
                 </label>
                 <select name="movement_type" id="movement_type"
                         class="w-full rounded-lg border border-gray-300 px-4 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-300 focus:ring-1"
@@ -32,13 +33,21 @@
                         <option value="{{ $type->value }}">{{ ucfirst(strtolower($type->name)) }}</option>
                     @endforeach
                 </select>
+                @error('movement_type')
+                <div class="pt-2 text-red-600 italic font-bold">{{ $message }}</div>
+                @enderror
             </div>
 
             <div>
-                <label for="quantity" class="block text-sm font-semibold text-gray-700 mb-1">Quantity</label>
+                <label id="quantity_label" for="quantity" class="flex items-center gap-1 text-sm font-semibold text-gray-700 mb-1">Final amount
+                    <x-forms.required-indicator/>
+                </label>
                 <input id="quantity" type="number" name="quantity" min="1" required
                        class="w-full rounded-lg border border-gray-300 px-4 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-300 focus:ring-1"/>
             </div>
+            @error('quantity')
+            <div class="pt-2 text-red-600 italic font-bold">{{ $message }}</div>
+            @enderror
 
             <div>
                 <label for="reason" class="block text-sm font-semibold text-gray-700 mb-1">Reason</label>

@@ -9,6 +9,7 @@ use App\Models\StockMovement;
 use App\Models\Warehouse;
 use App\Services\OperationOnProduct\OperationProcessService;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class OperationController extends Controller
 {
@@ -42,12 +43,23 @@ class OperationController extends Controller
      */
     public function store(Warehouse $warehouse, Product $product, Request $request)
     {
+        $inventory = Inventory::where('warehouse_id', $warehouse->id)->where('product_id', $product->id)->first();
+
         $request->merge([
             'warehouse_id'=>$warehouse->id,
-            'product_id' => $product->id
+            'product_id' => $product->id,
+            'inventory_id' => $inventory->id,
+        ]);
+
+
+        $request->validate([
+            'movement_type' => [Rule::enum(MovementType::class)],
+            'quantity' => ['gte:0','required'],
         ]);
 
         $this->operationService->performOperation($request);
+
+        return redirect('/warehouses/' . $request->get('warehouse_id'));
     }
 
     /**

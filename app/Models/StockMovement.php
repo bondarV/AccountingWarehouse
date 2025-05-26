@@ -11,4 +11,5 @@ class StockMovement extends Model
     /** @use HasFactory<StockMovementFactory> */
     use HasFactory;
 
+    protected $guarded = [];
 }
