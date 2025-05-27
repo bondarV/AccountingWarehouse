@@ -10,7 +10,7 @@ use App\Models\User;
 use App\Rules\UserExistenceRule;
 use Illuminate\Http\Request;
 
-class SellingStrategy implements IOperationStrategy
+class SellingStrategy extends OperationStrategy
 {
 
 
@@ -19,31 +19,27 @@ class SellingStrategy implements IOperationStrategy
         session(['current_movement_type' => MovementType::OUT->value]);
 
         $inventory = Inventory::find($request->input('inventory_id'));
-
+        // YAGNI Principle,'cause i realize that is unlikely to reuse this part,however separating violates KISS
         $request->validate([
             'quantity' => ['lte:' . $inventory->quantity],
             'customer_email' => ['email', 'required', new UserExistenceRule()],
         ]);
 
-        $changed_quantity = $request->get('quantity') - $inventory->quantity;
-        if ($changed_quantity > 0) {
-            $changed_quantity = '+' . str($changed_quantity);
-        }
-        StockMovement::create([
-                'product_id' => $request->get('product_id'),
-                'quantity' => $changed_quantity,
-                'warehouse_id' => $request->get('warehouse_id'),
-                'movement_type' => $request->get('movement_type'),
-            ]
-        );
+        $changed_quantity = $this->operationHelper->verifyQuantityMovement($request->get('quantity'), $inventory->quantity);
+
+        $this->operationHelper->storeNewStockMovement(productId: $request->get('product_id'),changedQuantity:$changed_quantity,warehouseId:$request->get('warehouse_id'),movementType: $request->get('movement_type') );
+
+
         $inventory->update([
             'quantity' => $request->get('quantity')
         ]);
+
 
         Purchase::create([
             'warehouse_id' => $request->get('warehouse_id'),
             'user_id' => User::where('email', $request->input('customer_email'))->first()->id,
             'quantity' => $request->get('quantity'),
         ]);
+
     }
 }

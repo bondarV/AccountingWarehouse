@@ -6,9 +6,10 @@ use App\Enums\MovementType;
 use App\Models\Inventory;
 use App\Models\StockMovement;
 use App\Rules\AdjustingDifferentValueRule;
+use App\Services\OperationOnProduct\OperationHelper;
 use Illuminate\Http\Request;
 
-class AdjustStrategy implements IOperationStrategy
+class AdjustStrategy extends OperationStrategy
 {
 
     public function populateData(Request $request)
@@ -21,18 +22,9 @@ class AdjustStrategy implements IOperationStrategy
             'quantity' => [new AdjustingDifferentValueRule($inventory->quantity)],
         ]);
 
-        $inventory = Inventory::find($request->get('inventory_id'));
-        $changed_quantity = $request->get('quantity') - $inventory->quantity;
-        if ($changed_quantity > 0) {
-            $changed_quantity = '+' . str($changed_quantity);
-        }
-        StockMovement::create([
-                'product_id' => $request->get('product_id'),
-                'quantity' => $changed_quantity,
-                'warehouse_id' => $request->get('warehouse_id'),
-                'movement_type' => $request->get('movement_type'),
-            ]
-        );
+        $changed_quantity = $this->operationHelper->verifyQuantityMovement($request->get('quantity'), $inventory->quantity);
+        $this->operationHelper->storeNewStockMovement(productId: $request->get('product_id'),changedQuantity: $changed_quantity,warehouseId:$request->get('warehouse_id'),movementType: $request->get('movement_type') );
+
         $inventory->update([
             'quantity' => $request->get('quantity')
         ]);
