@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services\OperationOnProduct\OperationStrategy;
+namespace App\Services\OperationStrategy;
 
-use App\Services\OperationOnProduct\OperationHelper;
+use App\Services\OperationHelper;
 use Illuminate\Http\Request;
 
 abstract class OperationStrategy

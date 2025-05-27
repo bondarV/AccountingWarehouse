@@ -7,7 +7,7 @@ use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\StockMovement;
 use App\Models\Warehouse;
-use App\Services\OperationOnProduct\OperationProcessService;
+use App\Services\OperationProcessService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 

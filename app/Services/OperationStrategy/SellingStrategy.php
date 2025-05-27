@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Services\OperationOnProduct\OperationStrategy;
+namespace App\Services\OperationStrategy;
 
 use App\Enums\MovementType;
 use App\Models\Purchase;
+use App\Models\StockMovement;
 use App\Models\User;
 use App\Rules\UserExistenceRule;
-use App\Services\OperationOnProduct\OperationHelper;
+use App\Services\OperationHelper;
 use Illuminate\Http\Request;
 
 class SellingStrategy extends OperationStrategy
@@ -34,7 +35,7 @@ class SellingStrategy extends OperationStrategy
         );
 
         $this->operationHelper->storeNewUtility(
-            class: \App\Models\StockMovement::class,
+            class: StockMovement::class,
             fields: [
                 'product_id'    => $request->get('product_id'),
                 'quantity'      => $changed_quantity,
@@ -54,6 +55,7 @@ class SellingStrategy extends OperationStrategy
             class: Purchase::class,
             fields: [
                 'warehouse_id' => $request->get('warehouse_id'),
+                'product_id'    => $request->get('product_id'),
                 'user_id'      => $user?->id,
                 'quantity'     => $request->get('quantity'),
             ]

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Product;
 use App\Models\Purchase;
 use App\Models\User;
 use App\Models\Warehouse;
@@ -17,6 +18,7 @@ return new class extends Migration
         Schema::create('purchases', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->foreignIdFor(Warehouse::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Product::class)->constrained()->cascadeOnDelete();
             $table->foreignUUid('user_id')->constrained()->cascadeOnDelete();
             $table->mediumInteger('quantity');
             $table->timestamps();

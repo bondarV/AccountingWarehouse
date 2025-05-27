@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\OperationOnProduct;
+namespace App\Services;
 
 use App\Models\Inventory;
 use Illuminate\Http\Request;

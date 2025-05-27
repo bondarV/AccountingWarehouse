@@ -1,11 +1,11 @@
 <?php
-namespace App\Services\OperationOnProduct\OperationStrategy;
+namespace App\Services\OperationStrategy;
 
 use App\Enums\MovementType;
 use App\Models\Inventory;
 use App\Models\StockMovement;
 use App\Rules\WarehouseTransportationDestinationRule;
-use App\Services\OperationOnProduct\OperationHelper;
+use App\Services\OperationHelper;
 use Illuminate\Http\Request;
 
 class RelocateStrategy extends OperationStrategy

@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Services\OperationOnProduct;
+namespace App\Services;
 
 use App\Enums\MovementType;
-use App\Services\OperationOnProduct\OperationStrategy\AdjustStrategy;
-use App\Services\OperationOnProduct\OperationStrategy\RelocateStrategy;
-use App\Services\OperationOnProduct\OperationStrategy\SellingStrategy;
+use App\Services\OperationStrategy\AdjustStrategy;
+use App\Services\OperationStrategy\RelocateStrategy;
+use App\Services\OperationStrategy\SellingStrategy;
 use Illuminate\Http\Request;
-use function PHPUnit\Framework\isTrue;
 
 class OperationProcessService
 {
@@ -20,7 +19,7 @@ class OperationProcessService
             MovementType::OUT->value => new SellingStrategy($operationHelper),
             MovementType::RELOCATE->value => new RelocateStrategy($operationHelper),
         };
-
+        //I don't need to dynamically alter or modify my algorithm logic
         $strategy->populateData($request);
     }
 }
