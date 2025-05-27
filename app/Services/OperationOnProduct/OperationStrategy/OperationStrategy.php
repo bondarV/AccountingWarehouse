@@ -3,7 +3,6 @@
 namespace App\Services\OperationOnProduct\OperationStrategy;
 
 use App\Services\OperationOnProduct\OperationHelper;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 
 abstract class OperationStrategy
@@ -13,5 +12,5 @@ abstract class OperationStrategy
 
     }
 
-    public abstract function populateData(FormRequest $request);
+    abstract public function populateData(Request $request);
 }
