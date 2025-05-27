@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Services\OperationOnProduct\OperationStrategy;
+namespace App\Services\OperationStrategy;
 
 use App\Enums\MovementType;
-use App\Models\Inventory;
 use App\Models\StockMovement;
 use App\Rules\AdjustingDifferentValueRule;
-use App\Services\OperationOnProduct\OperationHelper;
+use App\Services\OperationHelper;
 use Illuminate\Http\Request;
 
 class AdjustStrategy extends OperationStrategy
@@ -17,7 +16,7 @@ class AdjustStrategy extends OperationStrategy
         $this->operationHelper->setMovementType(MovementType::ADJUST->value);
 
     }
-    public function populateData(Request $request)
+    public function populateData(Request $request): void
     {
         $inventory = $this->operationHelper->getInventory($request);
 
