@@ -7,10 +7,12 @@ use App\Models\Inventory;
 use App\Models\Purchase;
 use App\Models\StockMovement;
 use App\Models\User;
+use App\Rules\UserExistenceRule;
 use Illuminate\Http\Request;
 
 class SellingStrategy implements IOperationStrategy
 {
+
 
     public function populateData(Request $request)
     {
@@ -18,14 +20,9 @@ class SellingStrategy implements IOperationStrategy
 
         $inventory = Inventory::find($request->input('inventory_id'));
 
-
         $request->validate([
             'quantity' => ['lte:' . $inventory->quantity],
-            'customer_email' => ['email', 'required', function ($attribute, $value, $fail) use ($request) {
-                if (!User::where('email', $request->input('customer_email'))->first()) {
-                    return $fail('Customer email is not valid');
-                }
-            }],
+            'customer_email' => ['email', 'required', new UserExistenceRule()],
         ]);
 
         $changed_quantity = $request->get('quantity') - $inventory->quantity;

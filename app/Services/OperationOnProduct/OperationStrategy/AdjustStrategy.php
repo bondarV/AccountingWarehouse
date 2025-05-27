@@ -5,6 +5,7 @@ namespace App\Services\OperationOnProduct\OperationStrategy;
 use App\Enums\MovementType;
 use App\Models\Inventory;
 use App\Models\StockMovement;
+use App\Rules\AdjustingDifferentValueRule;
 use Illuminate\Http\Request;
 
 class AdjustStrategy implements IOperationStrategy
@@ -17,12 +18,7 @@ class AdjustStrategy implements IOperationStrategy
         $inventory = Inventory::find($request->get('inventory_id'));
 
         $request->validate([
-            'quantity' =>
-                function ($attribute, $value, $fail) use ($inventory) {
-                    if ($value === (string)$inventory->quantity) {
-                        $fail("Let's stop doing redundant work! (you didn't intent to change quantity)");
-                    }
-                }
+            'quantity' => [new AdjustingDifferentValueRule($inventory->quantity)],
         ]);
 
         $inventory = Inventory::find($request->get('inventory_id'));

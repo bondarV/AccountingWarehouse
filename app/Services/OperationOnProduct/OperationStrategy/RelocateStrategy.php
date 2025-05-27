@@ -5,6 +5,7 @@ namespace App\Services\OperationOnProduct\OperationStrategy;
 use App\Enums\MovementType;
 use App\Models\Inventory;
 use App\Models\StockMovement;
+use App\Rules\WarehouseTransportationDestinationRule;
 use Illuminate\Http\Request;
 
 class RelocateStrategy implements IOperationStrategy
@@ -16,14 +17,9 @@ class RelocateStrategy implements IOperationStrategy
 
         $inventory = Inventory::find($request->get('inventory_id'));
 
-
         $request->validate([
             'quantity' => ['lte:' . $inventory->quantity],
-            'destination_warehouse_id' => ['required', function ($attribute, $value, $fail) use ($request) {
-                if ((string)$request->get('warehouse_id') === $value) {
-                    $fail('You can\'t relocate the warehouse to yourself');
-                }
-            }],
+            'destination_warehouse_id' => ['required', new WarehouseTransportationDestinationRule($request->get('warehouse_id'))],
         ]);
 
         if ((int)$request->input('quantity') === $inventory->quantity) {
