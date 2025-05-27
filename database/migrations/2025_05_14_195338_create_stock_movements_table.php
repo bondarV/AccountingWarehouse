@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignIdFor(Warehouse::class)->constrained()->cascadeOnDelete();
             $table->text('reason')->nullable();
             $table->string('movement_type');
-            $table->mediumInteger('quantity');
+            $table->string('quantity');
             $table->timestamps();
         });
     }

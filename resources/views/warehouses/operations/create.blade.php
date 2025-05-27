@@ -1,9 +1,10 @@
+@php use App\Enums\MovementType; @endphp
 <x-layout>
     <x-slot:page>
         Operation is on the process...
     </x-slot:page>
     <x-slot:backButton>
-        <x-return-back/>
+        <x-return-back href="/warehouses/{{$inventory->warehouse->id}}/products"/>
     </x-slot:backButton>
     <div class="max-w-2xl mx-auto mt-12 bg-white shadow-2xl rounded-2xl p-10">
         <div class="mb-8 text-center">
@@ -17,29 +18,42 @@
         </h2>
 
         <form
-            action="{{ url('/warehouses/' . $inventory->warehouse->id . '/products/' . $inventory->product->id . '/transactions/create') }}"
+            action="{{ route('warehouses.products.operations.store',[$key_warehouse->id,$inventory->product->id])}}"
             method="POST" class="space-y-6">
             @csrf
-
             <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1">
+                <label class="flex items-center gap-1 text-sm font-semibold text-gray-700 mb-1">
                     {{ $variationLabel ?? 'Movement Type' }}
+                    <x-form-layout.required/>
                 </label>
                 <select name="movement_type" id="movement_type"
                         class="w-full rounded-lg border border-gray-300 px-4 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-300 focus:ring-1"
                         required>
-                    <option value="" disabled selected>Choose the intent of the operation...</option>
+                    <option value="" disabled @if(!session('current_movement_type')) selected @endif>Choose the intent of
+                        the operation...
+                    </option>
+
                     @foreach($operations as $type)
-                        <option value="{{ $type->value }}">{{ ucfirst(strtolower($type->name)) }}</option>
+                        <option @if(session('current_movement_type') == $type->value) selected
+                                @endif value="{{ $type->value }}">{{ ucfirst(strtolower($type->name)) }}</option>
                     @endforeach
+
+
                 </select>
+                <x-form-layout.error-message name="movement_type"/>
+
             </div>
 
             <div>
-                <label for="quantity" class="block text-sm font-semibold text-gray-700 mb-1">Quantity</label>
-                <input id="quantity" type="number" name="quantity" min="1" required
+                <label id="quantity_label" for="quantity"
+                       class="flex items-center gap-1 text-sm font-semibold text-gray-700 mb-1">Final amount
+                    <x-form-layout.required/>
+                </label>
+                <input id="quantity" type="number" name="quantity" min="0" required
                        class="w-full rounded-lg border border-gray-300 px-4 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-300 focus:ring-1"/>
             </div>
+            <x-form-layout.error-message name="quantity"/>
+
 
             <div>
                 <label for="reason" class="block text-sm font-semibold text-gray-700 mb-1">Reason</label>
@@ -49,19 +63,23 @@
 
             <div id="relocate-fields" class="hidden">
                 <label class="block text-sm font-semibold text-gray-700 mb-1">Warehouse Placement</label>
-                <select name="warehouses"
-                       class="w-full rounded-lg border border-gray-300 px-4 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-300 focus:ring-1">
+                <select name="destination_warehouse_id"
+                        class="w-full rounded-lg border border-gray-300 px-4 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-300 focus:ring-1">
                     @foreach($warehouses as $warehouse)
-                        <option  value="{{$warehouse->id}}">    {{$warehouse->title}} </option>
+                        <option value="{{$warehouse->id}}">    {{$warehouse->title}} </option>
                     @endforeach>
                 </select>
+                <x-form-layout.error-message name="destination_warehouse_id"/>
             </div>
 
             <div id="out-fields" class="hidden">
-                <label for="customer" class="block text-sm font-semibold text-gray-700 mb-1">Customer Name</label>
-                <input id="customer" type="text" name="customer"
+                <label for="customer_email" class="block text-sm font-semibold text-gray-700 mb-1">Customer
+                    email</label>
+                <input id="customer_email" type="email" name="customer_email"
                        class="w-full rounded-lg border border-gray-300 px-4 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-300 focus:ring-1"/>
+                <x-form-layout.error-message name="customer_email"/>
             </div>
+
 
             <div>
                 <button type="submit"
