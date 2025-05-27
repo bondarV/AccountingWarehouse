@@ -6,15 +6,20 @@ use App\Enums\MovementType;
 use App\Models\Inventory;
 use App\Models\StockMovement;
 use App\Rules\AdjustingDifferentValueRule;
+use App\Services\OperationOnProduct\OperationHelper;
 use Illuminate\Http\Request;
 
 class AdjustStrategy extends OperationStrategy
 {
+    public function __construct(OperationHelper $operationHelper)
+    {
+        parent::__construct($operationHelper);
+        $this->operationHelper->setMovementType(MovementType::ADJUST->value);
+
+    }
     public function populateData(Request $request)
     {
-        session(['current_movement_type' => MovementType::ADJUST->value]);
-
-        $inventory = Inventory::find($request->get('inventory_id'));
+        $inventory = $this->operationHelper->getInventory($request);
 
         $request->validate([
             'quantity' => [new AdjustingDifferentValueRule($inventory->quantity)],

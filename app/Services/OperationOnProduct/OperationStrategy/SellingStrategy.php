@@ -3,19 +3,25 @@
 namespace App\Services\OperationOnProduct\OperationStrategy;
 
 use App\Enums\MovementType;
-use App\Models\Inventory;
 use App\Models\Purchase;
 use App\Models\User;
 use App\Rules\UserExistenceRule;
+use App\Services\OperationOnProduct\OperationHelper;
 use Illuminate\Http\Request;
 
 class SellingStrategy extends OperationStrategy
 {
+    public function __construct(OperationHelper $operationHelper)
+    {
+
+        parent::__construct($operationHelper);
+        $this->operationHelper->setMovementType(MovementType::RELOCATE->value);
+
+    }
+
     public function populateData(Request $request)
     {
-        session(['current_movement_type' => MovementType::OUT->value]);
-
-        $inventory = Inventory::find($request->input('inventory_id'));
+        $inventory = $this->operationHelper->getInventory($request);
 
         $request->validate([
             'quantity' => ['lte:' . $inventory->quantity],

@@ -2,6 +2,9 @@
 
 namespace App\Services\OperationOnProduct;
 
+use App\Models\Inventory;
+use Illuminate\Http\Request;
+
 class OperationHelper
 {
     public function verifyQuantityMovement($sendQuantity, $stateQuantity): string
@@ -22,5 +25,13 @@ class OperationHelper
     public function updateUtility($model, array $fields): void
     {
         $model->update($fields);
+    }
+    public function setMovementType($type) : void
+    {
+        session(['current_movement_type' => $type]);
+    }
+    public function getInventory(Request $request): ?Inventory
+    {
+        return Inventory::find($request->get('inventory_id'));
     }
 }

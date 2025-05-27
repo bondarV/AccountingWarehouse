@@ -5,13 +5,19 @@ use App\Enums\MovementType;
 use App\Models\Inventory;
 use App\Models\StockMovement;
 use App\Rules\WarehouseTransportationDestinationRule;
+use App\Services\OperationOnProduct\OperationHelper;
 use Illuminate\Http\Request;
 
 class RelocateStrategy extends OperationStrategy
 {
+    public function __construct(OperationHelper $operationHelper)
+    {
+        parent::__construct($operationHelper);
+        $this->operationHelper->setMovementType(MovementType::RELOCATE->value);
+
+    }
     public function populateData(Request $request)
     {
-        session(['current_movement_type' => MovementType::RELOCATE->value]);
 
         $inventory = Inventory::find($request->get('inventory_id'));
 
