@@ -5,9 +5,34 @@ info:
   version: 1.0.0
 
 paths:
+  /warehouses/{warehouse_id}/products:
+    get:
+      summary: Get warehouse inventory for a specific warehouse
+      parameters:
+        - name: warehouse_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful retrieval of warehouse inventory
+          content:
+            application/json:
+              example:
+                status: "success"
+                data:
+                  warehouse_id: 1
+                  items:
+                    - product_id: 101
+                      quantity: 45
+        '404':
+          description: Warehouse not found
+
   /warehouses/{warehouse_id}/products/{product_id}/operations:
     post:
       summary: Create a stock operation for a product in a warehouse
+      description: Create adjust, relocate, or sale operations for a product in a specific warehouse.
       parameters:
         - name: warehouse_id
           in: path
@@ -32,7 +57,6 @@ paths:
                 movement_type:
                   type: string
                   enum: [adjust, relocate, out]
-                  description: Operation type selected by the controller.
                 quantity:
                   type: integer
                   minimum: 0
@@ -40,7 +64,6 @@ paths:
                   type: string
                   maxLength: 255
                   nullable: true
-                  description: Optional note for the operation.
                 customer_email:
                   type: string
                   format: email
@@ -82,66 +105,3 @@ paths:
                 errors:
                   quantity: ["The quantity field is required."]
 
-  /api/inventory/{warehouse_id}:
-    get:
-      summary: Get warehouse inventory
-      parameters:
-        - name: warehouse_id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Successful retrieval
-          content:
-            application/json:
-              example:
-                status: "success"
-                data:
-                  warehouse_id: 1
-                  items:
-                    - product_id: 101
-                      quantity: 45
-        '404':
-          description: Warehouse not found
-
-  /api/purchases:
-    post:
-      summary: Process a new purchase
-      description: |
-        The current application creates purchases as part of the outbound stock operation.
-        This endpoint is retained for business-level documentation consistency.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                user_id: {type: integer}
-                warehouse_id: {type: integer}
-                items:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      product_id: {type: integer}
-                      quantity: {type: integer}
-      responses:
-        '201':
-          description: Purchase created successfully
-          content:
-            application/json:
-              example:
-                status: "success"
-                message: "Purchase completed successfully."
-        '422':
-          description: Validation error
-          content:
-            application/json:
-              example:
-                status: "error"
-                message: "The given data was invalid."
-                errors:
-                  items.0.quantity: ["Insufficient stock for product 101."]
