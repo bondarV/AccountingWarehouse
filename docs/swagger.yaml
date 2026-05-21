@@ -5,6 +5,83 @@ info:
   version: 1.0.0
 
 paths:
+  /warehouses/{warehouse_id}/products/{product_id}/operations:
+    post:
+      summary: Create a stock operation for a product in a warehouse
+      parameters:
+        - name: warehouse_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: product_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - movement_type
+                - quantity
+              properties:
+                movement_type:
+                  type: string
+                  enum: [adjust, relocate, out]
+                  description: Operation type selected by the controller.
+                quantity:
+                  type: integer
+                  minimum: 0
+                reason:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  description: Optional note for the operation.
+                customer_email:
+                  type: string
+                  format: email
+                  nullable: true
+                  description: Required when movement_type is out.
+                destination_warehouse_id:
+                  type: integer
+                  nullable: true
+                  description: Required when movement_type is relocate.
+            examples:
+              adjust:
+                summary: Inventory adjustment
+                value:
+                  movement_type: adjust
+                  quantity: 45
+                  reason: Stock count correction
+              relocate:
+                summary: Warehouse relocation
+                value:
+                  movement_type: relocate
+                  quantity: 10
+                  destination_warehouse_id: 2
+              sale:
+                summary: Customer sale
+                value:
+                  movement_type: out
+                  quantity: 3
+                  customer_email: customer@example.com
+      responses:
+        '302':
+          description: Operation created successfully and redirected to the warehouse page.
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              example:
+                status: "error"
+                message: "The given data was invalid."
+                errors:
+                  quantity: ["The quantity field is required."]
+
   /api/inventory/{warehouse_id}:
     get:
       summary: Get warehouse inventory
@@ -32,6 +109,9 @@ paths:
   /api/purchases:
     post:
       summary: Process a new purchase
+      description: |
+        The current application creates purchases as part of the outbound stock operation.
+        This endpoint is retained for business-level documentation consistency.
       requestBody:
         required: true
         content:
