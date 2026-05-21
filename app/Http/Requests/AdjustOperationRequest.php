@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Rules\AdjustingDifferentValueRule;
+use App\Models\Inventory;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AdjustOperationRequest extends FormRequest
@@ -12,7 +13,7 @@ class AdjustOperationRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,8 +23,15 @@ class AdjustOperationRequest extends FormRequest
      */
     public function rules(): array
     {
+        $inventory = Inventory::find($this->input('inventory_id'));
+
         return [
-            'quantity' => [new AdjustingDifferentValueRule($inventory->quantity)],
+            'quantity' => [
+                'required',
+                'integer',
+                'gte:0',
+                ...( $inventory ? [new AdjustingDifferentValueRule($inventory->quantity)] : [] ),
+            ],
         ];
     }
 }

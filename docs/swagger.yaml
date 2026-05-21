@@ -1,0 +1,107 @@
+openapi: 3.0.0
+info:
+  title: Warehouse Accounting API
+  description: API for managing warehouse inventory and purchase processing.
+  version: 1.0.0
+
+paths:
+  /warehouses/{warehouse_id}/products:
+    get:
+      summary: Get warehouse inventory for a specific warehouse
+      parameters:
+        - name: warehouse_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful retrieval of warehouse inventory
+          content:
+            application/json:
+              example:
+                status: "success"
+                data:
+                  warehouse_id: 1
+                  items:
+                    - product_id: 101
+                      quantity: 45
+        '404':
+          description: Warehouse not found
+
+  /warehouses/{warehouse_id}/products/{product_id}/operations:
+    post:
+      summary: Create a stock operation for a product in a warehouse
+      description: Create adjust, relocate, or sale operations for a product in a specific warehouse.
+      parameters:
+        - name: warehouse_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: product_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - movement_type
+                - quantity
+              properties:
+                movement_type:
+                  type: string
+                  enum: [adjust, relocate, out]
+                quantity:
+                  type: integer
+                  minimum: 0
+                reason:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                customer_email:
+                  type: string
+                  format: email
+                  nullable: true
+                  description: Required when movement_type is out.
+                destination_warehouse_id:
+                  type: integer
+                  nullable: true
+                  description: Required when movement_type is relocate.
+            examples:
+              adjust:
+                summary: Inventory adjustment
+                value:
+                  movement_type: adjust
+                  quantity: 45
+                  reason: Stock count correction
+              relocate:
+                summary: Warehouse relocation
+                value:
+                  movement_type: relocate
+                  quantity: 10
+                  destination_warehouse_id: 2
+              sale:
+                summary: Customer sale
+                value:
+                  movement_type: out
+                  quantity: 3
+                  customer_email: customer@example.com
+      responses:
+        '302':
+          description: Operation created successfully and redirected to the warehouse page.
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              example:
+                status: "error"
+                message: "The given data was invalid."
+                errors:
+                  quantity: ["The quantity field is required."]
+

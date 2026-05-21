@@ -16,7 +16,7 @@ class SellingStrategy extends OperationStrategy
     {
 
         parent::__construct($operationHelper);
-        $this->operationHelper->setMovementType(MovementType::RELOCATE->value);
+        $this->operationHelper->setMovementType(MovementType::OUT->value);
 
     }
 
